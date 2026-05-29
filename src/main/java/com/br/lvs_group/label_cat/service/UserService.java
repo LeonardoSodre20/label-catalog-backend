@@ -5,11 +5,16 @@ import com.br.lvs_group.label_cat.dto.UserResponse;
 import com.br.lvs_group.label_cat.entities.User;
 import com.br.lvs_group.label_cat.exception.ResourceNotFoundException;
 import com.br.lvs_group.label_cat.repositories.UserRepository;
+import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -43,10 +48,21 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public List<UserResponse> findAll() {
-        return userRepository.findAll().stream()
-                .map(UserService::toResponse)
-                .toList();
+    public Page<UserResponse> findAll(String name, String email, String function, Pageable pageable) {
+        Specification<User> spec = (root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            if (name != null && !name.isBlank()) {
+                predicates.add(cb.like(cb.lower(root.get("name")), "%" + name.toLowerCase() + "%"));
+            }
+            if (email != null && !email.isBlank()) {
+                predicates.add(cb.like(cb.lower(root.get("email")), "%" + email.toLowerCase() + "%"));
+            }
+            if (function != null && !function.isBlank()) {
+                predicates.add(cb.equal(cb.lower(root.get("function")), function.toLowerCase()));
+            }
+            return cb.and(predicates.toArray(new Predicate[0]));
+        };
+        return userRepository.findAll(spec, pageable).map(UserService::toResponse);
     }
 
     @Transactional

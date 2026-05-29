@@ -5,11 +5,12 @@ import com.br.lvs_group.label_cat.dto.UserResponse;
 import com.br.lvs_group.label_cat.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -31,8 +32,12 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserResponse>> findAll() {
-        List<UserResponse> response = userService.findAll();
+    public ResponseEntity<Page<UserResponse>> findAll(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String function,
+            @PageableDefault Pageable pageable) {
+        Page<UserResponse> response = userService.findAll(name, email, function, pageable);
         return ResponseEntity.ok(response);
     }
 
