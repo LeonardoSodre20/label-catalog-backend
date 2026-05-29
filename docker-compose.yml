@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: label-cat-db
+    environment:
+      POSTGRES_DB: label_cat_db
+      POSTGRES_USER: label_cat_user
+      POSTGRES_PASSWORD: label_cat_pass
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
