@@ -76,7 +76,7 @@ class PasswordResetTokenRepositoryTest {
         entityManager.flush();
 
         Optional<PasswordResetToken> found = repository
-                .findByUserAndUsedFalseAndExpiryDateAfter(user, LocalDateTime.now());
+                .findFirstByUserAndUsedFalseAndExpiryDateAfterOrderByCreatedAtDesc(user, LocalDateTime.now());
 
         assertThat(found).isPresent();
         assertThat(found.get().getId()).isEqualTo(validToken.getId());
@@ -91,7 +91,7 @@ class PasswordResetTokenRepositoryTest {
         entityManager.flush();
 
         Optional<PasswordResetToken> found = repository
-                .findByUserAndUsedFalseAndExpiryDateAfter(user, LocalDateTime.now());
+                .findFirstByUserAndUsedFalseAndExpiryDateAfterOrderByCreatedAtDesc(user, LocalDateTime.now());
 
         assertThat(found).isEmpty();
     }
@@ -104,7 +104,7 @@ class PasswordResetTokenRepositoryTest {
         entityManager.flush();
 
         Optional<PasswordResetToken> found = repository
-                .findByUserAndUsedFalseAndExpiryDateAfter(user, LocalDateTime.now());
+                .findFirstByUserAndUsedFalseAndExpiryDateAfterOrderByCreatedAtDesc(user, LocalDateTime.now());
 
         assertThat(found).isEmpty();
     }
@@ -114,7 +114,7 @@ class PasswordResetTokenRepositoryTest {
         User user = createUser();
 
         Optional<PasswordResetToken> found = repository
-                .findByUserAndUsedFalseAndExpiryDateAfter(user, LocalDateTime.now());
+                .findFirstByUserAndUsedFalseAndExpiryDateAfterOrderByCreatedAtDesc(user, LocalDateTime.now());
 
         assertThat(found).isEmpty();
     }

@@ -28,7 +28,7 @@ public class PasswordResetService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
 
         PasswordResetToken resetToken = tokenRepository
-                .findByUserAndUsedFalseAndExpiryDateAfter(user, LocalDateTime.now())
+                .findFirstByUserAndUsedFalseAndExpiryDateAfterOrderByCreatedAtDesc(user, LocalDateTime.now())
                 .orElseThrow(() -> new IllegalArgumentException("Token is invalid or expired"));
 
         if (!passwordEncoder.matches(rawToken, resetToken.getToken())) {
@@ -46,7 +46,7 @@ public class PasswordResetService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
 
         PasswordResetToken resetToken = tokenRepository
-                .findByUserAndUsedFalseAndExpiryDateAfter(user, LocalDateTime.now())
+                .findFirstByUserAndUsedFalseAndExpiryDateAfterOrderByCreatedAtDesc(user, LocalDateTime.now())
                 .orElseThrow(() -> new IllegalArgumentException("Token is invalid or expired"));
 
         if (!passwordEncoder.matches(rawToken, resetToken.getToken())) {

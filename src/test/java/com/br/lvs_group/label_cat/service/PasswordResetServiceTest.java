@@ -103,7 +103,7 @@ class PasswordResetServiceTest {
         token.setUsed(false);
 
         when(userRepository.findByEmail("user@example.com")).thenReturn(Optional.of(user));
-        when(tokenRepository.findByUserAndUsedFalseAndExpiryDateAfter(eq(user), any(LocalDateTime.class)))
+        when(tokenRepository.findFirstByUserAndUsedFalseAndExpiryDateAfterOrderByCreatedAtDesc(eq(user), any(LocalDateTime.class)))
                 .thenReturn(Optional.of(token));
 
         passwordResetService.verifyToken("user@example.com", rawToken);
@@ -116,7 +116,7 @@ class PasswordResetServiceTest {
         user.setEmail("user@example.com");
 
         when(userRepository.findByEmail("user@example.com")).thenReturn(Optional.of(user));
-        when(tokenRepository.findByUserAndUsedFalseAndExpiryDateAfter(eq(user), any(LocalDateTime.class)))
+        when(tokenRepository.findFirstByUserAndUsedFalseAndExpiryDateAfterOrderByCreatedAtDesc(eq(user), any(LocalDateTime.class)))
                 .thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> passwordResetService.verifyToken("user@example.com", "123456"))
@@ -137,7 +137,7 @@ class PasswordResetServiceTest {
         token.setUsed(false);
 
         when(userRepository.findByEmail("user@example.com")).thenReturn(Optional.of(user));
-        when(tokenRepository.findByUserAndUsedFalseAndExpiryDateAfter(eq(user), any(LocalDateTime.class)))
+        when(tokenRepository.findFirstByUserAndUsedFalseAndExpiryDateAfterOrderByCreatedAtDesc(eq(user), any(LocalDateTime.class)))
                 .thenReturn(Optional.of(token));
 
         assertThatThrownBy(() -> passwordResetService.verifyToken("user@example.com", "123456"))
@@ -168,7 +168,7 @@ class PasswordResetServiceTest {
         resetToken.setUsed(false);
 
         when(userRepository.findByEmail("user@example.com")).thenReturn(Optional.of(user));
-        when(tokenRepository.findByUserAndUsedFalseAndExpiryDateAfter(eq(user), any(LocalDateTime.class)))
+        when(tokenRepository.findFirstByUserAndUsedFalseAndExpiryDateAfterOrderByCreatedAtDesc(eq(user), any(LocalDateTime.class)))
                 .thenReturn(Optional.of(resetToken));
 
         passwordResetService.resetPassword("user@example.com", rawToken, "NewPassword123!", "NewPassword123!");
@@ -197,7 +197,7 @@ class PasswordResetServiceTest {
         user.setEmail("user@example.com");
 
         when(userRepository.findByEmail("user@example.com")).thenReturn(Optional.of(user));
-        when(tokenRepository.findByUserAndUsedFalseAndExpiryDateAfter(eq(user), any(LocalDateTime.class)))
+        when(tokenRepository.findFirstByUserAndUsedFalseAndExpiryDateAfterOrderByCreatedAtDesc(eq(user), any(LocalDateTime.class)))
                 .thenReturn(Optional.empty());
 
         assertThatThrownBy(() ->
@@ -222,7 +222,7 @@ class PasswordResetServiceTest {
         resetToken.setUsed(false);
 
         when(userRepository.findByEmail("user@example.com")).thenReturn(Optional.of(user));
-        when(tokenRepository.findByUserAndUsedFalseAndExpiryDateAfter(eq(user), any(LocalDateTime.class)))
+        when(tokenRepository.findFirstByUserAndUsedFalseAndExpiryDateAfterOrderByCreatedAtDesc(eq(user), any(LocalDateTime.class)))
                 .thenReturn(Optional.of(resetToken));
 
         assertThatThrownBy(() ->
