@@ -1,5 +1,6 @@
 package com.br.lvs_group.label_cat.dto;
 
+import com.br.lvs_group.label_cat.entities.UserFunction;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -14,8 +15,5 @@ public class UserRequest {
     @NotBlank(message = "Email is required")
     private String email;
 
-    @NotBlank(message = "Password is required")
-    private String password;
-
-    private String function;
+    private UserFunction function;
 }

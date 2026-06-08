@@ -32,7 +32,11 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    private String function;
+    @Enumerated(EnumType.STRING)
+    private UserFunction function;
+
+    @Column(name = "first_access", nullable = false)
+    private Boolean firstAccess = true;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
