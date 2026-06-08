@@ -39,4 +39,20 @@ class EmailServiceTest {
         assertThat(sent.getSubject()).isEqualTo("Password Reset - Label Cat");
         assertThat(sent.getText()).contains(token);
     }
+
+    @Test
+    void shouldSendGeneratedPasswordEmail() {
+        String to = "user@example.com";
+        String password = "AbCd1234";
+
+        emailService.sendGeneratedPassword(to, password);
+
+        verify(mailSender).send(messageCaptor.capture());
+
+        SimpleMailMessage sent = messageCaptor.getValue();
+        assertThat(sent.getTo()).containsExactly(to);
+        assertThat(sent.getSubject()).isEqualTo("Welcome to Label Cat - Your Account");
+        assertThat(sent.getText()).contains(password);
+        assertThat(sent.getText()).contains("temporary password");
+    }
 }

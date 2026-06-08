@@ -158,6 +158,7 @@ class PasswordResetServiceTest {
         user.setId(1L);
         user.setEmail("user@example.com");
         user.setPassword("old-hashed-password");
+        user.setFirstAccess(true);
 
         String rawToken = "123456";
         String hashedToken = passwordEncoder.encode(rawToken);
@@ -174,6 +175,7 @@ class PasswordResetServiceTest {
         passwordResetService.resetPassword("user@example.com", rawToken, "NewPassword123!", "NewPassword123!");
 
         assertThat(passwordEncoder.matches("NewPassword123!", user.getPassword())).isTrue();
+        assertThat(user.getFirstAccess()).isFalse();
         assertThat(resetToken.isUsed()).isTrue();
         verify(userRepository).save(user);
         verify(tokenRepository).save(resetToken);

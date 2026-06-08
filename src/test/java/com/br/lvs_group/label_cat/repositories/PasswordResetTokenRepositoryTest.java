@@ -2,6 +2,7 @@ package com.br.lvs_group.label_cat.repositories;
 
 import com.br.lvs_group.label_cat.entities.PasswordResetToken;
 import com.br.lvs_group.label_cat.entities.User;
+import com.br.lvs_group.label_cat.entities.UserFunction;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
@@ -26,7 +27,7 @@ class PasswordResetTokenRepositoryTest {
         user.setName("Test User");
         user.setEmail("test@example.com");
         user.setPassword("encoded-password");
-        user.setFunction("USER");
+        user.setFunction(UserFunction.ADMIN);
         return entityManager.persist(user);
     }
 
@@ -45,7 +46,7 @@ class PasswordResetTokenRepositoryTest {
         user.setName("Test User");
         user.setEmail("test@example.com");
         user.setPassword("encoded-password");
-        user.setFunction("USER");
+        user.setFunction(UserFunction.ADMIN);
         entityManager.persist(user);
 
         PasswordResetToken token = new PasswordResetToken();
