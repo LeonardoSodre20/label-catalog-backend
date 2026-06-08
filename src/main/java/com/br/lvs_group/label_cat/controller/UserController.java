@@ -1,7 +1,9 @@
 package com.br.lvs_group.label_cat.controller;
 
+import com.br.lvs_group.label_cat.dto.BatchDeleteRequest;
 import com.br.lvs_group.label_cat.dto.UserRequest;
 import com.br.lvs_group.label_cat.dto.UserResponse;
+import com.br.lvs_group.label_cat.dto.UserUpdateRequest;
 import com.br.lvs_group.label_cat.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -36,20 +38,21 @@ public class UserController {
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String email,
             @RequestParam(required = false) String function,
+            @RequestParam(required = false) String search,
             @PageableDefault Pageable pageable) {
-        Page<UserResponse> response = userService.findAll(name, email, function, pageable);
+        Page<UserResponse> response = userService.findAll(name, email, function, search, pageable);
         return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserResponse> update(@PathVariable Long id, @Valid @RequestBody UserRequest request) {
+    public ResponseEntity<UserResponse> update(@PathVariable Long id, @Valid @RequestBody UserUpdateRequest request) {
         UserResponse response = userService.update(id, request);
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        userService.delete(id);
+    @DeleteMapping
+    public ResponseEntity<Void> delete(@Valid @RequestBody BatchDeleteRequest request) {
+        userService.batchDelete(request.getIds());
         return ResponseEntity.noContent().build();
     }
 }
