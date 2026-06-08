@@ -5,6 +5,9 @@ import com.br.lvs_group.label_cat.dto.AuthResponse;
 import com.br.lvs_group.label_cat.dto.ForgotPasswordRequest;
 import com.br.lvs_group.label_cat.dto.ResetPasswordRequest;
 import com.br.lvs_group.label_cat.dto.VerifyTokenRequest;
+import com.br.lvs_group.label_cat.entities.User;
+import com.br.lvs_group.label_cat.entities.UserFunction;
+import com.br.lvs_group.label_cat.repositories.UserRepository;
 import com.br.lvs_group.label_cat.security.JwtUtil;
 import com.br.lvs_group.label_cat.service.PasswordResetService;
 import jakarta.validation.Valid;
@@ -28,6 +31,7 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
     private final PasswordResetService passwordResetService;
+    private final UserRepository userRepository;
 
     @PostMapping("/forgot-password")
     public ResponseEntity<Map<String, String>> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
@@ -55,10 +59,11 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 
         String email = auth.getName();
-        String role = auth.getAuthorities().iterator().next().getAuthority();
-        String function = role.startsWith("ROLE_") ? role.substring(5) : role;
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        String token = jwtUtil.generateToken(email, function);
-        return ResponseEntity.ok(new AuthResponse(token, "Bearer", email, function));
+        UserFunction function = user.getFunction() != null ? user.getFunction() : UserFunction.OPERATOR;
+        String token = jwtUtil.generateToken(email, function.name());
+        return ResponseEntity.ok(new AuthResponse(token, "Bearer", email, function, user.getFirstAccess()));
     }
 }
