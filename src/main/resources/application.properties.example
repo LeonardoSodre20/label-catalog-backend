@@ -1,3 +1,7 @@
+# ===============================================================
+# Local development config
+# Copy this file as application.properties and fill in secrets
+# ===============================================================
 spring.application.name=label-cat
 
 spring.datasource.url=jdbc:postgresql://localhost:5433/label_cat_db
@@ -22,3 +26,11 @@ spring.servlet.multipart.max-file-size=10MB
 spring.servlet.multipart.max-request-size=10MB
 
 upload.directory=uploads
+
+# ===============================================================
+# Production (Render + Neon) — use --spring.profiles.active=prod
+# Define estas env vars no Render:
+#   DB_HOST, DB_NAME, DB_USER, DB_PASSWORD
+#   JWT_SECRET, MAIL_USERNAME, MAIL_PASSWORD
+# See: application-prod.properties
+# ===============================================================
