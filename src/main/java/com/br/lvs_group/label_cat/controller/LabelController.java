@@ -38,8 +38,10 @@ public class LabelController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<LabelResponse>> findAll(@PageableDefault Pageable pageable) {
-        Page<LabelResponse> page = labelService.findAll(pageable);
+    public ResponseEntity<Page<LabelResponse>> findAll(
+            @PageableDefault Pageable pageable,
+            @RequestParam(required = false) String search) {
+        Page<LabelResponse> page = labelService.findAll(pageable, search);
         return ResponseEntity.ok(page);
     }
 

@@ -5,11 +5,12 @@ import com.br.lvs_group.label_cat.dto.TypeOfLabelResponse;
 import com.br.lvs_group.label_cat.service.TypeOfLabelService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/types-of-labels")
@@ -31,8 +32,10 @@ public class TypeOfLabelController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TypeOfLabelResponse>> findAll() {
-        List<TypeOfLabelResponse> response = service.findAll();
+    public ResponseEntity<Page<TypeOfLabelResponse>> findAll(
+            @PageableDefault(sort = "name") Pageable pageable,
+            @RequestParam(required = false) String search) {
+        Page<TypeOfLabelResponse> response = service.findAll(pageable, search);
         return ResponseEntity.ok(response);
     }
 

@@ -6,10 +6,10 @@ import com.br.lvs_group.label_cat.entities.TypeOfLabel;
 import com.br.lvs_group.label_cat.exception.ResourceNotFoundException;
 import com.br.lvs_group.label_cat.repositories.TypeOfLabelRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -39,10 +39,11 @@ public class TypeOfLabelService {
     }
 
     @Transactional(readOnly = true)
-    public List<TypeOfLabelResponse> findAll() {
-        return repository.findAll().stream()
-                .map(TypeOfLabelService::toResponse)
-                .toList();
+    public Page<TypeOfLabelResponse> findAll(Pageable pageable, String search) {
+        if (search == null || search.isBlank()) {
+            return repository.findAll(pageable).map(TypeOfLabelService::toResponse);
+        }
+        return repository.findAllWithSearch(search, pageable).map(TypeOfLabelService::toResponse);
     }
 
     @Transactional

@@ -59,8 +59,11 @@ public class LabelService {
     }
 
     @Transactional(readOnly = true)
-    public Page<LabelResponse> findAll(Pageable pageable) {
-        return labelRepository.findAll(pageable).map(LabelService::toResponse);
+    public Page<LabelResponse> findAll(Pageable pageable, String search) {
+        if (search == null || search.isBlank()) {
+            return labelRepository.findAll(pageable).map(LabelService::toResponse);
+        }
+        return labelRepository.findAllWithSearch(search, pageable).map(LabelService::toResponse);
     }
 
     @Transactional
