@@ -15,7 +15,7 @@ public class WebConfig {
     @Bean
     public CorsFilter corsFilter() {
         var config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:5173"));
+        config.setAllowedOrigins(List.of("http://localhost:5173", "https://labelcatalog.netlify.app"));
         config.setAllowedMethods(List.of("*"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
